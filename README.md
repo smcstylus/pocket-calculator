@@ -21,6 +21,8 @@ In the end, the easyest part was to add suport for keyboard keys.
 Even if I wrote the code using a Node server for auto refresh the browser window, I choosed to use just one file for JavaScript. So at least for now, the js code isn't split in MVC model.
 Anyhow, I think that is good app to exercise the base of JavaScript, because in the code I covered a lot of principles. The code is very well commented.
 
+You can see the app online on https://codepen.io/smcstylus/full/Yzxzzqy
+
 ## Technology used:
 
 - HTML: [PUG template engine][pug]
@@ -51,6 +53,19 @@ Anyhow, I think that is good app to exercise the base of JavaScript, because in 
   - Use JavaScript object as memory to store different variables
   - Use custom decimals (0 - 8). To be set in calcMemory constant
   - Math operations: + - \* / % sqrt
+- **_Keyboard Shortcuts_**
+  - p - On/Off
+  - c - Clear Screen
+  - l - Switch Ligts 
+  - t - Switch Timer 
+  - q - sqrt 
+  - 0-9 
+  - + 
+  - - 
+  - / 
+  - *
+  - = or Enter - equal
+  - Delete or Backspace - delete
   
 ## Tested on:
 macOs Hight Siera - Firefox, Chrome, Opera GX 
