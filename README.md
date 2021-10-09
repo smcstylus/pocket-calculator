@@ -13,9 +13,9 @@
 <br>
 
 I started this little project as a challenge for myself to see how hard is to build a poket calculator interface.
-First I made just the body, buttons for the numbers and for the math operations and the screen. As the project advanced, switch lights and timer (autoclose) buttons, then a clear screen and a delete buttons. After I added an On/Off button. Then I thinked that would be cool to add a history for operations, so I made the screen larger. After that I thinked that if I arrived until here would be cool to add a keyboard suport too.
-So initialy I developed this app just for the UI, esigning the calculator with the help of CSS (Bootstrap + CSS) and HTML (PUG), then I added the push buttons simulation and the lights on keyboard and screen with the help of CSS and JavaScript.
-After that I added a little code to intercept the clicked buttons and add suport for math operations, and of course, to display the results on the screen.
+First I made just the body, buttons for the Numbers and for the Math operations and the screen. As the project advanced I added the switch buttons for Lights and Timer (autoclose) , then a Clear screen and a Delete buttons. After I added an On/Off button. Then I thinked that would be cool to add a history for operations, so I made the screen larger. After that I thinked that if I arrived until here would be cool to add a keyboard suport too.
+So initialy I developed this app just for the UI, building the calculator with the help of CSS (Bootstrap + CSS) and HTML (PUG), then I added the push buttons simulation and the lights on keyboard and screen with the help of CSS and JavaScript.
+After that I added a little code to intercept the click events for buttons and to add suport for math operations, and of course, to display the results on the screen.
 In the end, the easyest part was to add suport for keyboard keys.
 
 Even if I wrote the code using a Node server for auto refresh the browser window, I choosed to use just one file for JavaScript. So at least for now, the js code isn't split in MVC model.
@@ -69,6 +69,7 @@ You can see the app online on https://codepen.io/smcstylus/full/Yzxzzqy (for som
   
 ## Tested on:
 macOs Hight Siera - Firefox, Chrome, Opera GX 
+Android
 <br><br><br>
 I don't studied a pocket calculator to see the results for long numbers, so the math part is not to precisely. I suggest you to replace that part of code (  _computeMath(), doMath(), mathFunctions()_ ) with your if you want to use this app in one of your projects. I limited more parts so please do it in a propper way if you will use it.
 
