@@ -1,0 +1,22 @@
+block variables
+
+doctype html
+html
+  include head.pug
+  body
+              
+    main
+      //- jumbo
+      div(class="p-5 mb-4 bg-light rounded-3")
+        div(class="container-fluid py-5")
+          h1(class="display-5 fw-bold")= message
+          p(class="col-md-8 fs-4")= description
+          p
+            a(class="btn btn-primary btn-lg" href="https://github.com/smcstylus/pocket-calculator" role="button") Read more on github repository
+            
+      //- main content
+      section.container
+        include calc.pug
+  
+    
+  include footer.pug

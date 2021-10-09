@@ -1,0 +1,75 @@
+
+p The pocket calculator can be resized only changing the value --numPad-size CSS property. 
+    <br> So to see this I've added a slider with values between 24 and 164. The default value of --numPad-size is 46px.
+    <br> In a real case, you can use calc(), media queries and viewport to auto adjust the size of the calculator.
+label(class="form-label") Change the size of the pocket calculator
+    input(type="range" class="form-range" min="26" max="164" value="46" id="calcSize")  
+    
+    
+//- Power switch button
+mixin calcPower(ch, data, id, cl)
+    button(class='btn btn-secondary numPad-no'+cl id='btn--'+id data-pad=data tabindex="0")= ch
+    
+//- Light switch button
+mixin calcLight(data)
+    div.calcSwitch.calcLightSwitch
+        div(class="form-check form-switch")
+            input(class="form-check-input btn-toggle position-relative active" type="checkbox" id="calcLightSwitch" tabindex="0" data-pad=data)
+            label(class="form-check-label" for="calcLightSwitch")
+            span.calcSwitchLabel.lightBulb Lights
+            
+//- Autoclose timer switch button           
+mixin calcTimer(data)
+    div.calcSwitch
+        div(class="form-check form-switch")
+            input(class="form-check-input btn-toggle position-relative active" type="checkbox" id="calcTimerSwitch" tabindex="0" data-pad=data)
+            label(class="form-check-label" for="calcTimerSwitch")
+            span.calcSwitchLabel Timer
+            
+//- Template for buttons: cl - class; ch - character
+mixin calcNo(ch, data, id, cl)
+    button(class='btn btn-secondary numPad-no'+cl id='btn--'+id data-pad=data tabindex="0")= ch
+    
+div.calc-body
+    div.calc-screen#calc-screen
+        span#calc-TimerTxt.float-start
+            b 
+        span#calc-screenHistory
+            ul
+        span#calc-screenOperation 
+            b 
+            i#calc-screenOperand 
+        span#calc-screenCurent 
+            b 
+    div.calc-numPad
+        div.calc-numPadRow
+            +calcPower('On/Off', "{'type':'function','key':'power'}" , 'power', ' btn-danger function')
+        div.calc-numPadRow
+            +calcNo('Cl', "{'type':'function','key':'clear'}" , 'clear', ' btn-danger function')
+            +calcLight("{'type':'switch','key':'light'}" )
+            +calcTimer("{'type':'switch','key':'timer'}")
+            +calcNo('Back', "{'type':'function','key':'backspace'}" , 'backspace', ' btn-danger function numPad-lgx float-end')
+        div.calc-numPadRow
+            +calcNo('7', "{'type':'number','key':'7'}", '7',' number')
+            +calcNo('8', "{'type':'number','key':'8'}" , '8',' number')
+            +calcNo('9', "{'type':'number','key':'9'}" , '9',' nnumberum')
+            +calcNo('%', "{'type':'operandAdvanced','key':'%'}" , 'procent', ' btn-info operandAdvanced')
+            +calcNo('√', "{'type':'operandAdvanced','key':'sqrt'}" , 'sqrt', ' btn-info operandAdvanced')
+        div.calc-numPadRow
+            +calcNo('4', "{'type':'number','key':'4'}" , '4',' number')
+            +calcNo('5', "{'type':'number','key':'5'}" , '5',' number')
+            +calcNo('6', "{'type':'number','key':'6'}" , '6',' number')
+            +calcNo('X', "{'type':'operand','key':'*'}" , 'multiplicate', ' btn-info operand')
+            +calcNo('/', "{'type':'operand','key':'/'}" , 'divide', ' btn-info operand')
+        div.calc-numPadRow
+            +calcNo('1', "{'type':'number','key':'1'}" , '1',' number')
+            +calcNo('2', "{'type':'number','key':'2'}" , '2',' number')
+            +calcNo('3', "{'type':'number','key':'3'}" , '3',' number')
+            +calcNo('+', "{'type':'operand','key':'+'}" , 'add', ' btn-info numPad-lgy operand')
+            +calcNo('-', "{'type':'operand','key':'-'}" , 'substract', ' btn-info numPad-gts operand')
+        div.calc-numPadRow
+            +calcNo('0', "{'type':'number','key':'0'}" , '0', ' numPad-lgx number')
+            +calcNo('.', "{'type':'meta','key':'.'}" , 'decimal', ' meta')
+            +calcNo('=', "{'type':'meta','key':'='}" , 'enter', ' btn-warning numPad-gts meta equal')         
+br
+br

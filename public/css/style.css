@@ -1,0 +1,367 @@
+/**
+ * smc Pocket Calculator v.1.0.0
+ *
+ * Author: Mihai - Calin Simion
+ * Website: htps://smcstylus.github.io
+ * Date: 2021 October
+ *
+ * Features:
+ * - interface
+ * Simulate the press of the UI buttons when the trackpad is clicked or keyboard keys are pressed/released
+ * On/Off button
+ * Autoclose (timer) switch. Reset timer on each UI button or keyboard allowed keys pressed.
+ * Lights switch
+ * Clear screen button
+ * Backspace (delete) button
+ * Decimal button
+ * Numbers buttons
+ * Math buttons
+ * Autosize entire calculator by changing just the --numPad-size value
+ *
+ * - display
+ * Display history of operations with all the operations. Scrollable area. Autoscroll to last result.
+ * Display previous result
+ * Display current operation sign
+ * Display curent number
+ *
+ * - others
+ * Use UI buttons or keyboard keys
+ * Use JavaScript object as memory to store different variables
+ * Use custom decimals (0 - 8). To be set in calcMemory constant
+ * Math operations: + - * / % sqrt ^
+ *
+ * Technology:
+ * HTML: PUG template engine
+ * CSS: CSS3, Bootstrap 5
+ * JavaScript: Vanila JS (ES6), jQuery 3.4.1
+ * Fonts: FontAvesome5, Urbanist, Quicksand
+ *
+ */
+
+:root {
+  /* Don't set --numPad-size lower than 26px */
+  --numPad-size: 46px;
+  --numPad-margin-x: 6px;
+  --numPad-margin-y: 3px;
+  --numPad-wh: 360px;
+  --numPad-pd: 4px;
+
+  --ratio: 1.875;
+
+  --font-size-root: 16px;
+  --font-size-pad: calc(var(--numPad-size) / var(--ratio));
+  --font-size-screen: calc((var(--numPad-size) * 100 / 40) / 4);
+  --font-family_1: "Urbanist", sans-serif;
+  --font-family_2: "Quicksand", sans-serif;
+  --font-family_3: "Anonymous Pro", monospace !important;
+
+  --shadow-screen-out: inset 0 0 10px #282e28, 0px 1px 0 1px #ffffff66,
+    0px -1px 0 1px #ffffff22;
+  --shadow-pad-normal: inset 0 0 2px 2px #282e2855, 0 0 1px 2px #282e2888,
+    0 1px 2px 1px #282e2888, 0 2px 1px 1px #ffffff55 !important;
+  --shadow-pad-hover: inset 0 0 8px 4px #282e2844, 0 0 2px 2px #282e2888,
+    0 1px 2px 1px #282e2888, 0 2px 1px 1px #ffffff77 !important;
+
+  --color-yellow: #ffc107;
+  --color-yellow-light: #f8e7b3;
+  --color-screen: #929d97;
+  --color-screen-light: #9bb398;
+  --color-red: #dc3545;
+  --color-blue: #0dcaf0;
+}
+.calc-body {
+  position: relative;
+  width: calc(5 * var(--numPad-size) + 10 * var(--numPad-margin-x) + 30px);
+  border-radius: 20px;
+  padding: 20px;
+  background-color: #43434d;
+  box-shadow: 0px -5px 0px #2c2c33, 0px 5px 0px #626268;
+  font-family: sans-serif;
+  cursor: default;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
+}
+.calc-screen {
+  width: calc(5 * var(--numPad-size) + 10 * var(--numPad-margin-x));
+  height: calc(5 * var(--font-size-screen));
+  border: 1px solid #00000099;
+  border-radius: 4px;
+  background-color: var(--color-screen);
+  margin-bottom: 30px;
+  text-align: right;
+  padding: 4px 8px;
+  -moz-box-shadow: var(--shadow-screen-out);
+  -webkit-box-shadow: var(--shadow-screen-out);
+  box-shadow: var(--shadow-screen-out);
+
+  padding: 0 calc(var(--font-size-pad) / 4);
+  line-height: var(--font-size-screen);
+  font-size: calc(var(--font-size-pad) / 1.2);
+  font-weight: 300;
+  color: #000;
+  font-family: var(--font-family-1);
+}
+.calc-screen ul,
+.calc-screen ul li,
+.calc-screen ul li b,
+.calc-screen b {
+  background-color: transparent !important;
+}
+
+.calc-screen b {
+  clear: both;
+  height: var(--font-size-screen);
+  margin: 0;
+  padding: 0 calc(var(--font-size-pad) / 4);
+  line-height: var(--font-size-screen);
+  font-size: calc(var(--font-size-pad) / 1.2);
+  font-weight: 300;
+  color: #000;
+  font-family: var(--font-family-1);
+  font-weight: 400;
+  width: 100%;
+  display: inline-block;
+}
+.calc-screen #calc-TimerTxt {
+  display: block;
+  position: absolute !important;
+}
+.calc-screen #calc-TimerTxt b {
+  font-size: calc(var(--font-size-pad) / 1.5);
+}
+.calc-screen #calc-screenHistory ul {
+  height: calc(2 * var(--font-size-screen));
+  padding: 0;
+  margin: 0;
+  overflow-y: scroll;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #282e28 transparent !important;
+  position: relative;
+}
+.calc-screen #calc-screenHistory ul::-webkit-scrollbar-track {
+  background: transparent;
+}
+.calc-screen #calc-screenHistory ul li {
+  padding: 0 24px;
+  margin: 0;
+  width: 100%;
+}
+.calc-screen #calc-screenHistory ul li i {
+  border: 0;
+  font-weight: 100;
+  font-style: italic;
+  font-size: calc(var(--font-size-pad) / 1.5);
+  color: #43434d;
+  clear: both;
+  display: block;
+  padding: 0 0 0 16px;
+}
+.calc-screen #calc-screenHistory b {
+  border: 0;
+  font-weight: 600;
+  font-size: calc(var(--font-size-pad) / 1.5);
+
+  color: #444;
+}
+.calc-screen #calc-screenOperation {
+  display: block;
+}
+.calc-screen #calc-screenOperation b {
+  font-family: var(--font-family-2);
+  font-size: calc(var(--font-size-pad) / 1.5);
+}
+.calc-screen #calc-screenOperation b,
+.calc-screen #calc-screenOperand {
+  display: inline !important;
+}
+
+.calc-screen #calc-screenOperand {
+  padding: 0 2px;
+  color: #2c2c33;
+  font-style: normal;
+}
+.calc-screen #calc-screenCurent b {
+  font-weight: 200;
+}
+
+.calc-numPadRow {
+  width: calc(5 * var(--numPad-size) + 10 * var(--numPad-margin-x));
+  padding: var(--numPad-pd) 0;
+}
+.calc-numPadRow .numPad-no {
+  transition: all 0.15s ease-in-out !important;
+}
+.calc-numPadRow .numPad-no {
+  width: var(--numPad-size);
+  height: var(--numPad-size);
+  margin: var(--numPad-margin-y) var(--numPad-margin-x);
+  padding: 0;
+  font-size: var(--font-size-pad) !important;
+  color: #fff9;
+  border: 0;
+  -moz-box-shadow: var(--shadow-pad-normal);
+  -webkit-box-shadow: var(--shadow-pad-normal);
+  box-shadow: var(--shadow-pad-normal);
+}
+.calc-numPadRow .numPad-no.num,
+.calc-numPadRow .numPad-no.num:hover,
+.calc-numPadRow .numPad-no.num:focus,
+.calc-numPadRow .numPad-no.num.hover {
+  background-color: rgb(102, 111, 118) !important;
+}
+.calc-numPadRow .numPad-no.operand,
+.calc-numPadRow .numPad-no.operand:hover,
+.calc-numPadRow .numPad-no.operand:focus,
+.calc-numPadRow .numPad-no.operand.hover {
+  background-color: var(--color-blue) !important;
+}
+.calc-numPadRow .numPad-no.equal,
+.calc-numPadRow .numPad-no.equal:hover,
+.calc-numPadRow .numPad-no.equal:focus,
+.calc-numPadRow .numPad-no.equal.hover {
+  background-color: var(--color-yellow) !important;
+}
+.calc-numPadRow .numPad-no.func,
+.calc-numPadRow .numPad-no.func:hover,
+.calc-numPadRow .numPad-no.func:focus,
+.calc-numPadRow .numPad-no.func.hover {
+  background-color: var(--color-red) !important;
+}
+
+.calc-numPadRow .numPad-no.hover {
+  -moz-box-shadow: var(--shadow-pad-hover);
+  -webkit-box-shadow: var(--shadow-pad-hover);
+  box-shadow: var(--shadow-pad-hover);
+  filter: brightness(105%);
+  font-size: calc(var(--font-size-pad) - 0.04rem) !important;
+}
+
+.calc-numPadRow .numPad-no#btn--power {
+  width: calc(2 * var(--numPad-margin-x) + 2 * var(--numPad-size));
+  border-radius: 50%;
+  height: calc(var(--numPad-size) / 2);
+  font-size: calc(var(--numPad-size) / 3) !important;
+  line-height: calc(var(--numPad-size) / 2) !important;
+}
+.calc-numPadRow .numPad-no.numPad-lgx {
+  width: calc(2 * var(--numPad-margin-x) + 2 * var(--numPad-size));
+}
+.calc-numPadRow .numPad-no.numPad-lgy {
+  height: calc(
+    2 * var(--numPad-margin-y) + 2 * var(--numPad-pd) + 2 * var(--numPad-size)
+  );
+  position: absolute;
+}
+.calc-numPadRow .numPad-no.numPad-gts {
+  margin-left: calc(3 * var(--numPad-margin-x) + var(--numPad-size));
+}
+.lightOn .calc-screen {
+  background-color: var(--color-screen-light);
+  -moz-box-shadow: var(--shadow-screen-out);
+  -webkit-box-shadow: var(--shadow-screen-out);
+  box-shadow: var(--shadow-screen-out);
+}
+.lightOn .numPad-no {
+  color: #fff;
+  text-shadow: 0 0 10px #f8e7b366;
+}
+
+/* Lights switch*/
+.calcSwitch {
+  width: var(--numPad-size);
+  height: var(--numPad-size);
+  margin: var(--numPad-margin-y) var(--numPad-margin-x);
+  padding: 0;
+  font-size: var(--font-size-pad) !important;
+  position: relative;
+  display: inline-block;
+}
+.calcLightSwitch .form-check {
+  margin-bottom: 0;
+}
+
+.calcSwitch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23676767'/%3e%3c/svg%3e") !important;
+  cursor: pointer;
+  -moz-box-shadow: inset 0 0 10px #282e28;
+  -webkit-box-shadow: inset 0 0 10px #282e28;
+  box-shadow: inset 0 0 10px #282e28;
+  -moz-opacity: 1;
+  -webkit-opacity: 1;
+  opacity: 1;
+}
+.calcSwitch .form-check-input {
+  margin-top: calc(var(--numPad-size) / 2);
+  width: calc(var(--numPad-size));
+}
+.calcSwitch .form-check-input:checked {
+  background-color: rgba(255, 255, 255, 0.932);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+.calcSwitch .form-check-input:focus {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.calcSwitch .calcSwitchLabel {
+  position: absolute;
+  font-size: calc(var(--font-size-pad) / 3);
+  color: #fff;
+  font-weight: 200;
+  float: left;
+  left: 0;
+  padding: 0px;
+  text-align: center;
+  margin-top: calc(var(--numPad-margin-y) * 2);
+  letter-spacing: calc(var(--font-size-pad) / 12);
+  width: calc(var(--numPad-size)) !important;
+}
+.calc-numPad #btn--power::after,
+.calcSwitch .calcSwitchLabel.lightBulb:after {
+  content: " ";
+  width: calc(var(--font-size-pad) / 6);
+  height: calc(var(--font-size-pad) / 6);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background-color: #fff;
+  display: block;
+  left: 0;
+  padding: 0;
+  color: #fff;
+  cursor: initial;
+  z-index: 1;
+  -moz-opacity: 1;
+  -webkit-opacity: 1;
+  opacity: 1;
+}
+.calcSwitch .calcSwitchLabel.lightBulb:after {
+  position: absolute;
+  float: right;
+  top: 0;
+  margin-left: calc(var(--numPad-size) - var(--font-size-pad) / 6) !important;
+  margin-top: calc((var(--font-size-pad) / 6)) !important;
+  margin: var(--numPad-margin-y) 0px 0px;
+}
+
+.calc-numPad #btn--power::after {
+  margin-left: calc(2 * var(--numPad-margin-x)) !important;
+  margin-right: calc(0px - 4 * var(--numPad-margin-x)) !important;
+  margin-top: calc(var(--numPad-size) / 4 - var(--font-size-pad) / 10);
+  float: left;
+}
+
+.calc-numPad #btn--power.on::after,
+.calcLightSwitch .form-check-input:checked ~ .calcSwitchLabel.lightBulb:after {
+  color: var(--color-yellow);
+  border: 1px solid var(--color-yellow);
+  background-color: var(--color-yellow);
+  opacity: 0.9;
+  -moz-filter: blur(1px);
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
+  -moz-box-shadow: 0 0 6px 1px var(--color-yellow-light);
+  -webkit-box-shadow: 0 0 6px 1px var(--color-yellow-light);
+  box-shadow: 0 0 6px 1px var(--color-yellow-light);
+}

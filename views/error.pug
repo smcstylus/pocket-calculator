@@ -1,0 +1,38 @@
+doctype html
+html
+  head(lang='en')
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    link(rel="shortcut icon" href="/favicon.ico")
+    style(type="text/css"). 
+      body { 
+        background-color: #fbfbfb;
+        color:#3c3c3c;
+        font-size:16px;
+        width:100%;
+        margin:0;
+        padding:0px
+      }
+      h1{
+        font-size:3rem;
+      }
+      header{
+        padding:1rem;
+        background-color:#cdcdcd;
+        height:7rem;
+      }
+      section{
+        background-color:salmon; 
+        padding:20px;
+        min-height:calc(100vh - 7rem)
+      }
+    title= title
+    
+body  
+  header
+    h1= title 
+  section
+    h3= message
+    if error.status != '404'
+      h3= error.status
+      pre= error.stack
