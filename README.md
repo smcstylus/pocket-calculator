@@ -60,10 +60,10 @@ You can see the app online on https://codepen.io/smcstylus/full/Yzxzzqy (for som
   - t - Switch Timer 
   - q - sqrt 
   - 0-9 
-  - + 
-  - - 
+  - \+ 
+  - \- 
   - / 
-  - *
+  - \*
   - = or Enter - equal
   - Delete or Backspace - delete
   
